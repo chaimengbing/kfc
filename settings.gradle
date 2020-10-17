@@ -1,0 +1,2 @@
+include ':app', ':SerialPortLibrary'
+rootProject.name='kfc'

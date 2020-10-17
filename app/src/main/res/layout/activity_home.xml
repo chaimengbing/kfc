@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="horizontal"
+    tools:context=".activity.HomeActivity">
+
+    <LinearLayout
+        android:layout_width="130dp"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="77dp"
+            android:layout_height="23dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/kfc_take_meals_bg"
+            android:gravity="center"
+            android:text="@string/take_meals_flow"
+            android:textColor="@color/red"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            style="@style/kfc_step_imageview"
+            android:layout_marginTop="14dp"
+            android:src="@mipmap/icon_kfc_step_1" />
+
+        <TextView
+            style="@style/kfc_step_textview"
+            android:text="1.扫码开柜" />
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="7dp"
+            android:src="@mipmap/icon_arrow" />
+
+        <ImageView
+            style="@style/kfc_step_imageview"
+            android:src="@mipmap/icon_kfc_step_2" />
+
+        <TextView
+            style="@style/kfc_step_textview"
+            android:text="2.取出餐品" />
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="7dp"
+            android:src="@mipmap/icon_arrow" />
+
+        <ImageView
+            style="@style/kfc_step_imageview"
+            android:src="@mipmap/icon_kfc_step_3" />
+
+        <TextView
+            style="@style/kfc_step_textview"
+            android:text="3.关闭餐门" />
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/icon_scan_bg">
+
+        <LinearLayout
+            android:id="@+id/scan_layout"
+            android:layout_width="218dp"
+            android:layout_height="144dp"
+
+            android:layout_centerInParent="true"
+            android:background="@drawable/kfc_scan_bg"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/scan_code_start"
+                android:textColor="@color/gray_4"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/scan_imageview"
+                android:layout_width="118dp"
+                android:layout_height="88dp"
+                android:layout_marginTop="5dp"
+                android:src="@mipmap/ic_below_scan" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scan_layout"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:text="@string/home_tips"
+            android:textColor="@color/white"
+            android:textSize="9sp" />
+    </RelativeLayout>
+
+
+</LinearLayout>

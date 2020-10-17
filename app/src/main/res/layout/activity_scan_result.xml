@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    tools:context=".activity.ScanResultActivity">
+
+
+    <LinearLayout
+        android:id="@+id/scan_success_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/scan_result_imageview"
+            style="@style/kfc_imageview"
+            android:layout_marginTop="30dp"
+            android:src="@mipmap/icon_breakdown" />
+
+        <TextView
+            android:id="@+id/result_tips_textview"
+            style="@style/kfc_content_red_textview"
+            android:layout_below="@id/scan_result_imageview"
+            android:text="@string/noProducts_content1" />
+
+        <TextView
+            android:id="@+id/result_content_textview"
+            style="@style/kfc_content_gray_textview"
+            android:layout_below="@id/result_tips_textview"
+            android:text="@string/MechanicalFailures_2" />
+
+        <TextView
+            android:id="@+id/back_home_textview"
+            style="@style/kfc_back_home_gray_textview"
+            android:layout_below="@id/result_content_textview"
+            android:text="返回首页" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/scan_failed_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            style="@style/kfc_content_red_textview"
+            android:layout_below="@id/scan_result_imageview"
+            android:layout_marginTop="30dp"
+            android:text="扫码失败" />
+
+        <TextView
+            android:id="@+id/scan_fail_textview"
+            style="@style/kfc_content_gray_textview" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    style="@style/kfc_scan_fail_imageview"
+                    android:src="@mipmap/icon_scan_fail_1" />
+
+                <TextView
+                    style="@style/kfc_step_textview"
+                    android:layout_marginTop="20dp"
+                    android:text="1.请尽量保持收银条票面平整" />
+            </LinearLayout>
+
+            <View style="@style/kfc_divier_view" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    style="@style/kfc_scan_fail_imageview"
+                    android:src="@mipmap/icon_scan_fail_2" />
+
+                <TextView
+                    style="@style/kfc_step_textview"
+                    android:layout_marginTop="20dp"
+                    android:text="2.请将二维码置于扫码口正前方" />
+            </LinearLayout>
+
+            <View style="@style/kfc_divier_view" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    style="@style/kfc_scan_fail_imageview"
+                    android:src="@mipmap/icon_scan_fail_3" />
+
+                <TextView
+                    style="@style/kfc_step_textview"
+                    android:layout_marginTop="20dp"
+                    android:text="3.调整二维码至合适距离和角度" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/scan_fail_4_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <View style="@style/kfc_divier_view" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        style="@style/kfc_scan_fail_imageview"
+                        android:src="@mipmap/icon_scan_fail_4" />
+
+                    <TextView
+                        style="@style/kfc_step_textview"
+                        android:layout_marginTop="20dp"
+                        android:text="4.随时联系餐厅工作人员" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <include layout="@layout/include_bottom" />
+</RelativeLayout>

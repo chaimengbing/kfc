@@ -1,0 +1,17 @@
+syntax = "proto3";
+option java_multiple_files = true;
+option java_package = "com.hoperun.yum.pickup.grpc";
+option java_outer_classname = "MessageBaseDefineProto";
+option objc_class_prefix = "HLW";
+
+package yum.message;
+
+message Status {
+    string code = 1;
+    string message = 2;
+}
+message MessageResponse {
+    Status status = 1;
+    string data = 2;
+    string signature = 3;
+}

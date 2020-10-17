@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.QRCordActivity">
+
+    <TextView
+        android:id="@+id/title_textview"
+        style="@style/kfc_home_title_textview"
+        android:text="@string/qrcodr_title" />
+
+    <TextView
+        android:id="@+id/count_down_textview"
+        style="@style/kfc_content_gray_textview"
+        android:layout_below="@id/title_textview"
+        android:text="@string/qrcodr_subhead" />
+
+    <RelativeLayout
+        android:layout_width="400dp"
+        android:layout_height="200dp"
+        android:layout_below="@id/count_down_textview"
+        android:layout_centerHorizontal="true"
+        android:background="@mipmap/icon_scan_open_cell_bg">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/qrcord_imageview"
+            android:layout_width="360dp"
+            android:layout_height="160dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="30dp"
+            android:src="@mipmap/gif_scan_open_cell" />
+    </RelativeLayout>
+
+
+    <include layout="@layout/include_bottom" />
+
+</RelativeLayout>

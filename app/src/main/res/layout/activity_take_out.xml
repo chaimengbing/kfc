@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.TakeOutActivity">
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/kfc_title_textview"
+        android:text="@string/takeOut_title" />
+
+    <TextView
+        style="@style/kfc_content_gray_textview"
+        android:layout_below="@id/title"
+        android:text="@string/take_out_context" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@mipmap/ic_launcher" />
+
+
+    <Button
+        android:id="@+id/back_button"
+        style="@style/kfc_red_button" />
+
+    <TextView
+        style="@style/kfc_content_gray_textview"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:text="@string/home_tips" />
+</RelativeLayout>

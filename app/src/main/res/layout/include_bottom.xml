@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/bottom_left_button"
+            style="@style/kfc_white_button"
+            android:text="@string/con_meals" />
+
+        <Button
+            android:id="@+id/bottom_right_button"
+            style="@style/kfc_red_button"
+            android:layout_marginLeft="20dp"
+            android:text="@string/qrcodr_back" />
+
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tips"
+        style="@style/kfc_tips_textview"
+        android:text="@string/home_tips" />
+
+</LinearLayout>
