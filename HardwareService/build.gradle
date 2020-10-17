@@ -1,0 +1,113 @@
+import proguard.gradle.ProGuardTask
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+    defaultConfig {
+        minSdkVersion 18
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+        lintOptions {
+            abortOnError false
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+
+    sourceSets {
+        main {
+            jni.srcDirs = []
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            cacheChangingModulesFor(0, 'SECONDS')
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar', "*.aar"])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation group: 'androidx.multidex', name: 'multidex', version: '2.0.1'
+    api files('libs/hardware_can_v1.1.3.jar')
+    api files('libs/hardware_standard-V4.1.4.jar')
+
+    implementation 'com.squareup.okhttp3:okhttp:4.5.0'
+
+    implementation 'com.aliyun.alink.linksdk:iot-linkkit:1.7.1.3'
+    //阿里云日志上传
+    implementation 'com.aliyun.dpa:oss-android-sdk:+'
+    //下载
+    implementation 'com.liulishuo.filedownloader:library:1.7.7'
+}
+
+
+// TODO 打包前需要更换打包类型
+def type = "lock"
+//def type = "net"
+
+
+archivesBaseName = "auv_hardware_"+type+"_V"+android.defaultConfig.versionName
+
+task makeJar(type:Jar){
+    from(project.zipTree('build/intermediates/packaged-classes/release/classes.jar'))
+    from(project.zipTree('build/intermediates/packaged-classes/release/libs/hardware_standard-V4.1.3.jar'))
+    from(project.zipTree('build/intermediates/packaged-classes/release/libs/hardware_can_V1.1.2.jar'))
+    from(project.zipTree('build/intermediates/packaged-classes/release/libs/aliyun-java-sdk-core-4.5.0.jar'))
+//    from(project.zipTree('build/intermediates/packaged-classes/release/libs/ZLog.jar'))
+    destinationDir = file('build/outputs/jar/original')
+}
+makeJar.dependsOn(build)
+
+
+//混淆jar 脚本 (许通过 执行 gradlew proguard 命令来执行混淆)
+task proguard(dependsOn: ['makeJar'], type: ProGuardTask) {
+    //输入的jar路径
+    injars 'build/outputs/jar/original/'+archivesBaseName+'.jar'
+    //输出的jar路径
+    outjars 'build/outputs/jar/'+archivesBaseName+'.jar'
+    //混淆配置
+    configuration 'proguard-rules.pro'
+}
+
+
+
