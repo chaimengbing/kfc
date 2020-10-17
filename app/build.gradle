@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 //apply plugin: 'com.google.protobuf'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 29
@@ -104,6 +105,16 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
 
+    implementation 'org.greenrobot:greendao:3.2.2'
+    implementation 'org.greenrobot:eventbus:3.1.1'
+
+}
+
+greendao {
+    schemaVersion 1
+    daoPackage 'com.auw.kfc.greendao'
+    targetGenDir 'src/main/java'
+    generateTests false
 }
 
 
