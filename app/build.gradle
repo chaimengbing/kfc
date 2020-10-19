@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'com.google.protobuf'
+apply plugin: 'com.google.protobuf'
 apply plugin: 'org.greenrobot.greendao'
 
 android {
@@ -19,75 +19,68 @@ android {
         targetCompatibility = 1.8
     }
 
-//    signingConfigs {
-//        config {
-//            keyAlias 'railway'
-//            keyPassword 'railway1116'
-//            storeFile file('/railway.jks')
-//            storePassword 'railway1116'
-//        }
-//
-//    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        pickFirst 'META-INF/INDEX.LIST'
+        pickFirst 'META-INF/LICENSE'
+        pickFirst 'META-INF/io.netty.versions.properties'
+    }
 
-    sourceSets {
-        main {
-//            java {
-//                srcDir 'src/main/java'
-//            }
-//            proto {
-//                srcDir 'src/main/proto'
-//            }
+
+    repositories {
+        flatDir {
+            dirs 'libs'
         }
     }
 
-//    signingConfigs {
-//        debug {
-//            v1SigningEnabled true
-//            v2SigningEnabled true
-//        }
-//
-//        release {
-//            storeFile
-//            storePassword
-//            keyAlias
-//            keyPassword
-//            v1SigningEnabled true
-//            v2SigningEnabled true
-//        }
-//    }
-//
-//    getSigningProperties()
+    sourceSets {
+        main {
+            jni.srcDirs = ['libs']
+            jniLibs.srcDirs = ['libs']
 
-    //自定义输出包名的设置
-//    applicationVariants.all {
-//        variant ->
-//            variant.outputs.all {
-//                // 输出apk名称
-//                def fileName = "app_kfc_test_front_${defaultConfig.versionName}.apk"
-//                outputFileName = fileName
-//            }
-//    }
+        }
+    }
+
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-//        debug {
-//            debuggable true  //启用debug的buildType配置
-//        }
-//        //输出类型
-//        applicationVariants.all {
-//            //判断是release还是debug版本
-//            def buildType = it.buildType.name
-//            //获取当前时间的"YYYY-MM-dd"格式。
-//            def createTime = new Date().format("YYYY-MM-dd", TimeZone.getTimeZone("GMT+08:00"))
-//            //如果是正式包,将其输入到指定文件夹
-//            if (buildType == "release") {
-//                it.getPackageApplication().outputDirectory = new File('.\\release' + "/${createTime}")
-//            }
-//        }
     }
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.4.0"
+    }
+    plugins {
+        javalite {
+            artifact = "com.google.protobuf:protoc-gen-javalite:3.0.0"
+        }
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.7.0'
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.plugins {
+                javalite {}
+                grpc {
+                    // Options added to --grpc_out
+                    option 'lite'
+                }
+            }
+        }
+    }
+    configurations.all {
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+    }
+
 }
 
 
@@ -97,6 +90,7 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation project(path: ':HardwareService')
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
@@ -107,6 +101,13 @@ dependencies {
 
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'org.greenrobot:eventbus:3.1.1'
+
+    implementation 'io.grpc:grpc-netty:1.19.0'
+//    implementation 'io.grpc:grpc-netty-shaded:1.19.0'
+    implementation 'io.grpc:grpc-testing:1.19.0'
+    implementation 'io.grpc:grpc-protobuf-lite:1.19.0'
+    implementation 'io.grpc:grpc-stub:1.19.0'
+    implementation 'javax.annotation:javax.annotation-api:1.2'
 
 }
 

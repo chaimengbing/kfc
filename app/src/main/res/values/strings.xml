@@ -31,4 +31,6 @@
 
     <string name="no_self_help_content1">未能识别当前二维码，请使用自助取餐柜二维码进行取餐</string>
     <string name="no_self_help_content2">取餐码请在订单详情页或收银条上查找</string>
+
+    <string name="open_cell_fail">%1$s号格子打开失败，请联系管理员</string>
 </resources>

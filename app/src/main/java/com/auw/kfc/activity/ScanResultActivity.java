@@ -19,15 +19,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.auv.utils.AUVLogUtil;
+import com.auv.utils.SharedPreferenceHelper;
 import com.auw.kfc.R;
 import com.auw.kfc.constant.Constant;
 import com.auw.kfc.util.Utils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.yum.cpos.grpclib.pickupservice.PickupGrpc;
+import com.yum.cpos.grpclib.pickupservice.ReportFromCabinetERequest;
+import com.yum.cpos.grpclib.pickupservice.ReportFromCabinetEResponse;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.List;
+
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+import io.grpc.stub.StreamObserver;
 
 /**
  * 扫描二维码结果展示页面
@@ -81,29 +90,11 @@ public class ScanResultActivity extends BaseActivity {
         backHomeTextView.setVisibility( View.GONE );
         if (intent != null) {
             result = intent.getStringExtra( Constant.SCAN_RESULT );
-            String cellNo = "";
-            StringBuffer cellSB = new StringBuffer();
-            if (result.contains( Constant.CELL_OPEN_SUCCESS )) {
-                cellNo = result.replace( Constant.CELL_OPEN_SUCCESS, "" );
-                Type type = new TypeToken<List<String>>() {
-                }.getType();
-
-                Gson gson = new Gson();
-                List<String> cellNumbers = gson.fromJson( cellNo, type );
-
-                if (cellNumbers != null) {
-                    for (String s : cellNumbers) {
-                        cellSB.append( s ).append( "," );
-                    }
-                    count = cellNumbers.size();
-                }
-                result = Constant.CELL_OPEN_SUCCESS;
-            }
             if (!TextUtils.isEmpty( result )) {
                 if (result.equals( Constant.CELL_OPEN_SUCCESS )) {
                     //格子打开成功
                     scanResultImageView.setImageResource( R.mipmap.icon_cell_open_success );
-                    resultTipsTextView.setText( cellSB.toString().substring( 0, cellSB.length() - 1 ) + "号餐柜已开启" );
+                    resultTipsTextView.setText( result + "号餐柜已开启" );
                     resultContentTextView.setText( "请您及时取出餐品并关闭柜门，谢谢" );
                     leftButton.setVisibility( View.VISIBLE );
 
@@ -114,6 +105,8 @@ public class ScanResultActivity extends BaseActivity {
                     backHomeTextView.setVisibility( View.VISIBLE );
 
                     playSound( count );
+
+                    takeMealsSuccess();
 
 
                 } else if (result.equals( Constant.MAKEING_MEALS )) {
@@ -176,7 +169,7 @@ public class ScanResultActivity extends BaseActivity {
                     //取餐码已经失效（已经取过餐了）
                     scanResultImageView.setImageResource( R.mipmap.icon_cell_full );
                     resultTipsTextView.setText( "取餐柜已满，请到柜台取餐" );
-                    resultContentTextView.setVisibility( View.GONE);
+                    resultContentTextView.setVisibility( View.GONE );
                     rightButton.setBackgroundResource( R.drawable.kfc_red_aleady_use_selector );
 
                     Message message = new Message();
@@ -215,6 +208,52 @@ public class ScanResultActivity extends BaseActivity {
                     backHomeTextView.setVisibility( View.VISIBLE );
                 }
             }
+        }
+    }
+
+    private ManagedChannel channel;
+    private PickupGrpc.PickupStub mPickupStub;
+
+    private void initGrpc(String ip, int port) {
+        if (TextUtils.isEmpty( ip ) || port < 0) {
+            return;
+        }
+        this.channel = ManagedChannelBuilder.forAddress( ip, port )
+                .usePlaintext()
+                .build();
+        mPickupStub = PickupGrpc.newStub( channel );
+    }
+
+    private void takeMealsSuccess() {
+        AUVLogUtil.d( TAG, "takeMealsSuccess::" );
+        String grpcIp = SharedPreferenceHelper.getInstance( getApplicationContext() ).getString( Constant.GRPC_IP, "" );
+        String grpcPort = SharedPreferenceHelper.getInstance( getApplicationContext() ).getString( Constant.GRPC_PORT, "" );
+        if (!TextUtils.isEmpty( grpcIp ) && !TextUtils.isEmpty( grpcPort )) {
+            AUVLogUtil.d( TAG, "initGrpc::IP:" + grpcIp + ",grpcPort:" + grpcPort );
+            if (channel == null) {
+                initGrpc( grpcIp, Integer.parseInt( grpcPort ) );
+            }
+        }
+
+        if (mPickupStub != null) {
+            ReportFromCabinetERequest reportFromCabinetERequest = ReportFromCabinetERequest.newBuilder().setCellNo( result ).setEventType( Constant.EVENT_TYPE_CLOSED ).build();
+            mPickupStub.reportFromCabinetE( reportFromCabinetERequest, new StreamObserver<ReportFromCabinetEResponse>() {
+                @Override
+                public void onNext(ReportFromCabinetEResponse value) {
+                    String code = value.getStatus().getCode();
+                    AUVLogUtil.d( TAG, "onNext::code:" + code );
+                }
+
+                @Override
+                public void onError(Throwable t) {
+
+                }
+
+                @Override
+                public void onCompleted() {
+
+                }
+            } );
         }
     }
 

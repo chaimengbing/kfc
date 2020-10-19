@@ -40,4 +40,27 @@ public class Constant {
     public final static String BACK = "B";//后门扫码器
     public final static String TYPE_SMALL = "small";
     public final static String TYPE_BIG = "big";
+
+
+    /*
+     设置类
+  */
+    public static String KEY_SERIAL_PORT = "serialPort";
+    public static String DEFAULT_SERIAL_PORT = "/dev/ttyS4";
+    public static String KEY_APP_ID = "appId";
+    public static String KEY_DEVICE_ID = "deviceId";
+    public static String KEY_DEVICE_NAME = "deviceName";
+    public static String DEFAULT_DEVICE_NAME = "DEVICE_KFC";
+    public static String KEY_SHOP_NAME = "shopName";
+    public static String KEY_SHOP_NUM = "shopNum";
+
+
+    public final static String GRPC_IP = "grpc_ip";
+    public final static String GRPC_PORT = "grpc_port";
+    public final static String CURRENT_SAVE_CELL_POSITION = "currentSaveCellPosition";
+
+    public static final String EVENT_TYPE_CREATE = "KDS-I03020001";
+    public static final String EVENT_TYPE_CLOSED = "CLOSED";
+    public static final String EVENT_TYPE_CANCEL = "KDS-CANCEL";
+    public static final String EVENT_TYPE_CELL_TYPE = "KDS_OPEN_CELL";
 }

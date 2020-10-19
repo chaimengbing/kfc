@@ -1,21 +1,8 @@
-// Copyright 2015 The gRPC Authors
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "com.hoperun.yum.pickup.grpc";
-option java_outer_classname = "PickupProto";
+option java_package = "com.yum.cpos.grpclib.pickupservice";
+option java_outer_classname = "PickupGrpcServiceProto";
 option objc_class_prefix = "HLW";
 
 import "MessageInfoBaseDefine.proto";
@@ -24,13 +11,49 @@ package yum.message;
 
 service Pickup {
 
+    //E场景
+    rpc reportFromCabinetE (ReportFromCabinetERequest) returns (ReportFromCabinetEResponse) {
+
+    }
+
+    rpc pickupOrder (OrderGetRequest) returns (stream OrderGetResponse) {
+
+    }
+
+    rpc clientLogin (ClientLoginRequest) returns (ClientLoginResponse) {
+
+    }
+
+    rpc updateOrder (OrderUpdateRequest) returns (OrderUpdateResponse) {
+
+    }
+
+    rpc updateLocationInfo (LocationInfoUpdateRequest) returns (LocationInfoUpdateResponse) {
+
+    }
+
+    rpc systemConfig (SystemConfigRequest) returns (SystemConfigResponse) {
+
+    }
+
     rpc reportOrder (OrderReportRequest) returns (OrderReportResponse) {
 
     }
 
+    rpc reportBusinessType (BusinessTypeReportRequest) returns (BusinessTypeReportResponse) {
+
+    }
+
+    rpc getAdv (AdvRequest) returns (stream AdvResponse) {
+
+    }
+
+    rpc reportGetMealLog (ReportGetMealRequest) returns (ReportGetMealResponse) {
+
+    }
 }
 
-message GrpcOrder {
+message Order {
     string avatarUrl = 1; //头像URL
     string orderId = 2; //取餐码
     string eventType = 3; //是否为可取餐状态
@@ -39,13 +62,139 @@ message GrpcOrder {
     string saleTime = 6;
     string eventCont = 7; //该订单对应的event内容
     string orderUniqueId = 8;
+    string orderNumber = 9;
+    string fromForcer = 10;
+    string amount = 11;
+    string storeCode = 12; //餐厅编号
+    string eventTime = 13; //本次event发生时间
+    string deviceId = 14; //设备号（每家店可能有多个取餐柜设备）
+    string deviceName = 15; //设备描述
+    string openStatus = 16; //开门状态
+    string openMsg = 17; //开门信息
+    string cellNo = 18; //格子号（设备上的具体格子）
+    string transactionId = 19; //取餐号
+    string platType = 20; //渠道号（preorder/delivery）
+    string posGuid = 21; //POS订单号 没有时，使用orderId
+    string status = 22; //订单状态  4、已删单 5、已上屏（放餐） 6、已下屏（取餐），100、开门成功，101、开门失败（100以上为开门状态）
+    string statusUpdateTime = 23; //订单状态更新时间
+    string transTime = 24; //OC推送时间
+    string remark = 25; //备注
+    string realOrderId = 26;
+    string qrCode = 27; //二维码扫描
+    string deviceTime = 28; //取餐柜时间
+}
+
+//Store service 更新取餐订单
+message OrderUpdateRequest {
+    Order order = 1; //订单列表
+}
+
+//Store service 更新取餐订单响应
+message OrderUpdateResponse {
+    Status status = 1;
+}
+
+//叫号牌获取当前取餐订单请求
+message OrderGetRequest {
+    string deviceId = 1; //设备ID
+    string option = 2;
+}
+
+//叫号牌获取当前取餐订单响应
+message OrderGetResponse {
+    repeated Order orders = 1; //等待的订单
+}
+
+//叫号牌login请求
+message ClientLoginRequest {
+    string deviceId = 1;
+}
+
+message ClientLoginResponse {
+    Status status = 1;
+}
+
+//叫号牌结束订单请求
+message OrderFinishRequest {
+    string deviceId = 1;
+    string orderId = 2;
+}
+
+//叫号牌结束订单响应
+message OrderFinishResponse {
+    Status status = 1;
+}
+
+message LocationInfoUpdateRequest {
+
+}
+
+message LocationInfoUpdateResponse {
+    Status status = 1;
+}
+
+message SystemConfigRequest {
+
+}
+
+message SystemConfigResponse {
+    string timeStamp = 1;
+    string timeout = 2;
 }
 
 message OrderReportRequest {
-    repeated GrpcOrder orders = 1;
+    repeated Order orders = 1;
 }
 
 message OrderReportResponse {
     Status status = 1;
 }
 
+message BusinessTypeReportRequest {
+    string deviceId = 1;
+    string businessType = 2;
+}
+
+message BusinessTypeReportResponse {
+    Status status = 1;
+}
+
+message AdvRequest {
+
+}
+
+message AdvResponse {
+    string advs = 1;
+}
+
+message ReportGetMealRequest {
+    string transcationId = 1;
+    string cellNo = 2;
+    string reportTime = 3;
+}
+
+message ReportGetMealResponse {
+    Status status = 1;
+}
+
+message ReportFromCabinetERequest {
+    string billCode = 1; //发票提取码
+    string orderId = 2; //订单号
+    string transactionId = 3; //取餐号
+    string platType = 4; //渠道号 根据此判断是ec/d3
+    string qrCode = 5; //二维码code
+    string eventTime = 6; //本次event发生时间 对应oc statusUpdateTime
+    string eventType = 7; //event类型
+    string cellNo = 8; //格子号
+    string deviceId = 9; //设备号
+    string deviceName = 10; //设备描述
+    string deviceTime = 11; //取餐柜时间
+    string openStatus = 12;
+    string openMsg = 13;
+    string storecode = 14; //店号
+}
+
+message ReportFromCabinetEResponse {
+    Status status = 1; //状态
+    string transactionId = 2; //取餐号
+}

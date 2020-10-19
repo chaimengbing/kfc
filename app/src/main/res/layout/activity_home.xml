@@ -71,6 +71,12 @@
         android:layout_height="match_parent"
         android:background="@mipmap/icon_scan_bg">
 
+        <View
+            android:id="@+id/system_view"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true" />
+
         <LinearLayout
             android:id="@+id/scan_layout"
             android:layout_width="218dp"
