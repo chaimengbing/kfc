@@ -68,26 +68,22 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
         initSerialService();
         initScanEvent();
+    }
+
+    private boolean isSaveMeals = false;
+
+    private void initGrpc() {
         String grpcIp = SharedPreferenceHelper.getInstance( getApplicationContext() ).getString( Constant.GRPC_IP, "" );
         String grpcPort = SharedPreferenceHelper.getInstance( getApplicationContext() ).getString( Constant.GRPC_PORT, "" );
         if (!TextUtils.isEmpty( grpcIp ) && !TextUtils.isEmpty( grpcPort )) {
             AUVLogUtil.d( TAG, "initGrpc::IP:" + grpcIp + ",grpcPort:" + grpcPort );
             if (channel == null) {
-                initGrpc( grpcIp, Integer.parseInt( grpcPort ) );
+                this.channel = ManagedChannelBuilder.forAddress( grpcIp, Integer.parseInt( grpcPort ) )
+                        .usePlaintext()
+                        .build();
+                mPickupStub = PickupGrpc.newStub( channel );
             }
         }
-    }
-
-    private boolean isSaveMeals = false;
-
-    private void initGrpc(String ip, int port) {
-        if (TextUtils.isEmpty( ip ) || port < 0) {
-            return;
-        }
-        this.channel = ManagedChannelBuilder.forAddress( ip, port )
-                .usePlaintext()
-                .build();
-        mPickupStub = PickupGrpc.newStub( channel );
     }
 
     @Override
@@ -149,7 +145,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             if (TextUtils.isEmpty( barcode )) {
                 return;
             }
-            Log.i( TAG, "barcode:" + barcode );
+            AUVLogUtil.d( TAG, "barcode:" + barcode );
             handQRCode( barcode );
         } );
     }
@@ -169,6 +165,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
         } else {
             isSaveMeals = true;
+            initGrpc();
             //处理扫码存餐
             if (mPickupStub != null) {
                 ReportFromCabinetERequest reportFromCabinetERequest = ReportFromCabinetERequest.newBuilder().setQrCode( barcode ).setEventType( Constant.EVENT_TYPE_CREATE ).build();

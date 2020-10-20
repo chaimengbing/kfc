@@ -23,14 +23,6 @@ public class InitHardwareService {
         if (platformEnum == null) {
             throw new UnknownError( "实例化失败,请选择控制板类型" );
         }
-            /*
-            申请SDK必须的权限
-         */
-        NetworkUtils.getInstance( context ).applyRight();
-        Package mPackage = context.getClass().getPackage();
-        if (mPackage == null || !Utils.verification( mPackage.getName() )) {
-            throw new UnknownError( "非特约客户，验证失败" );
-        }
 
         switch (platformEnum) {
             case STANDARD_BOARD:
