@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.auw.kfc">
 
+    <uses-sdk tools:overrideLibrary="com.aliyun.alink.linksdk.tmp" />
+
     <application
         android:name=".KFCApplication"
         android:allowBackup="true"

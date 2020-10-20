@@ -12,6 +12,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
     }
 
     compileOptions {
@@ -30,6 +32,12 @@ android {
         pickFirst 'META-INF/io.netty.versions.properties'
     }
 
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+
+
 
     repositories {
         flatDir {
@@ -44,12 +52,37 @@ android {
 
         }
     }
+    signingConfigs {
+        debug {
+            keyAlias 'kfc'
+            keyPassword '123456'
+            storeFile file('../app/kfc.jks')
+            storePassword '123456'
+        }
+        release {
+            keyAlias 'kfc'
+            keyPassword '123456'
+            storeFile file('../app/kfc.jks')
+            storePassword '123456'
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            if (variant.buildType.name.equals('release')) {
+                variant.getPackageApplicationProvider().get().outputDirectory = new File("../app/release")
+                outputFileName = "app_kfc_front_release_1.0.apk"
+            }
+        }
+    }
 
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled true  //是否开启混淆
+            shrinkResources true  //是否开启压缩
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
@@ -102,7 +135,7 @@ dependencies {
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'org.greenrobot:eventbus:3.1.1'
 
-    implementation 'io.grpc:grpc-netty:1.19.0'
+//    implementation 'io.grpc:grpc-netty:1.19.0'
 //    implementation 'io.grpc:grpc-netty-shaded:1.19.0'
     implementation 'io.grpc:grpc-testing:1.19.0'
     implementation 'io.grpc:grpc-protobuf-lite:1.19.0'
